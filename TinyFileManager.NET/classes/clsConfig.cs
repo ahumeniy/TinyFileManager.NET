@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Configuration;
+using TinyFileManager.NET.interfaces;
+using TinyFileManager.NET.classes;
 
 namespace TinyFileManager.NET
 {
@@ -216,24 +218,22 @@ namespace TinyFileManager.NET
         }
 
         /// <summary>
-        /// Returns the full upload drive path
+        /// Returns the DirectoryResolver used to get the Thumb and UplaodDirectory
         /// </summary>
-        public static string strUploadPath
+        public static IDirectoryResolver objDirectoryResolver
         {
             get
             {
-                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.UploadPath.TrimEnd('\\') + "\\";
-            }
-        }
+                if (_objDirectoryResolver == null)
+                {
+                    _objDirectoryResolver = new clsDefaultDirectoryResolver();
+                }
 
-        /// <summary>
-        /// Returns the full thumb drive path
-        /// </summary>
-        public static string strThumbPath
-        {
-            get
+                return _objDirectoryResolver;
+            }
+            set
             {
-                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.ThumbPath.TrimEnd('\\') + "\\";
+                _objDirectoryResolver = value;
             }
         }
 
@@ -313,8 +313,14 @@ namespace TinyFileManager.NET
                 strTemp = strInput.Trim('\'');
                 arrExt = strTemp.Split(new string[] {"'",",","'"}, StringSplitOptions.RemoveEmptyEntries);
 
+                
+
                 return arrExt;
         }   // getArrayFromString
+
+        #region Fields
+        private static IDirectoryResolver _objDirectoryResolver;
+        #endregion
 
     }   // class
 

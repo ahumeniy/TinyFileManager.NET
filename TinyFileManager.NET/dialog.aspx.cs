@@ -93,9 +93,9 @@ namespace TinyFileManager.NET
                     Response.Write("<b>AllowedVideoExtensions:</b> " + clsConfig.strAllowedVideoExtensions + "<br>");
                     Response.Write("<b>BaseURL:</b> " + clsConfig.strBaseURL + "<br>");
                     Response.Write("<b>DocRoot:</b> " + clsConfig.strDocRoot + "<br>");
-                    Response.Write("<b>ThumbPath:</b> " + clsConfig.strThumbPath + "<br>");
+                    Response.Write("<b>ThumbPath:</b> " + clsConfig.objDirectoryResolver.ThumbsDirectory + "<br>");
                     Response.Write("<b>ThumbURL:</b> " + clsConfig.strThumbURL + "<br>");
-                    Response.Write("<b>UploadPath:</b> " + clsConfig.strUploadPath + "<br>");
+                    Response.Write("<b>UploadPath:</b> " + clsConfig.objDirectoryResolver.UploadDirectory + "<br>");
                     Response.Write("<b>UploadURL:</b> " + clsConfig.strUploadURL + "<br>");
                     Response.End();
                     break;
@@ -105,8 +105,8 @@ namespace TinyFileManager.NET
                         strFolder = Request.Form["folder"] + "";
                         //forge ahead without checking for existence
                         //catch will save us
-                        Directory.CreateDirectory(clsConfig.strUploadPath + "\\" + strFolder);
-                        Directory.CreateDirectory(clsConfig.strThumbPath + "\\" + strFolder);
+                        Directory.CreateDirectory(clsConfig.objDirectoryResolver.UploadDirectory + "\\" + strFolder);
+                        Directory.CreateDirectory(clsConfig.objDirectoryResolver.ThumbsDirectory + "\\" + strFolder);
 
                         // end response, since it's an ajax call
                         Response.End();
@@ -126,8 +126,8 @@ namespace TinyFileManager.NET
                     //check file was submitted
                     if ((filUpload != null) && (filUpload.ContentLength > 0))
                     {
-                        strTargetFile = clsConfig.strUploadPath + this.strFolder + filUpload.FileName;
-                        strThumbFile = clsConfig.strThumbPath + this.strFolder + filUpload.FileName;
+                        strTargetFile = clsConfig.objDirectoryResolver.UploadDirectory + this.strFolder + filUpload.FileName;
+                        strThumbFile = clsConfig.objDirectoryResolver.ThumbsDirectory + this.strFolder + filUpload.FileName;
                         filUpload.SaveAs(strTargetFile);
 
                         if (this.isImageFile(strTargetFile))
@@ -141,23 +141,23 @@ namespace TinyFileManager.NET
                     break;
 
                 case "download":
-                    FileInfo objFile = new FileInfo(clsConfig.strUploadPath + "\\" + this.strFile);
+                    FileInfo objFile = new FileInfo(clsConfig.objDirectoryResolver.UploadDirectory + "\\" + this.strFile);
                     Response.ClearHeaders();
                     Response.AddHeader("Pragma", "private");
                     Response.AddHeader("Cache-control", "private, must-revalidate");
                     Response.AddHeader("Content-Type", "application/octet-stream");
                     Response.AddHeader("Content-Length", objFile.Length.ToString());
                     Response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(this.strFile));
-                    Response.WriteFile(clsConfig.strUploadPath + "\\" + this.strFile);
+                    Response.WriteFile(clsConfig.objDirectoryResolver.UploadDirectory + "\\" + this.strFile);
                     break;
 
                 case "delfile":
                     try
                     {
-                        File.Delete(clsConfig.strUploadPath + "\\" + this.strFile);
-                        if (File.Exists(clsConfig.strThumbPath + "\\" + this.strFile))
+                        File.Delete(clsConfig.objDirectoryResolver.UploadDirectory + "\\" + this.strFile);
+                        if (File.Exists(clsConfig.objDirectoryResolver.ThumbsDirectory + "\\" + this.strFile))
                         {
-                            File.Delete(clsConfig.strThumbPath + "\\" + this.strFile);
+                            File.Delete(clsConfig.objDirectoryResolver.ThumbsDirectory + "\\" + this.strFile);
                         }
                     }
                     catch
@@ -169,8 +169,8 @@ namespace TinyFileManager.NET
                 case "delfolder":
                     try
                     {
-                        Directory.Delete(clsConfig.strUploadPath + "\\" + strFolder,true);
-                        Directory.Delete(clsConfig.strThumbPath + "\\" + strFolder, true);
+                        Directory.Delete(clsConfig.objDirectoryResolver.UploadDirectory + "\\" + strFolder,true);
+                        Directory.Delete(clsConfig.objDirectoryResolver.ThumbsDirectory + "\\" + strFolder, true);
                     }
                     catch
                     {
@@ -196,7 +196,7 @@ namespace TinyFileManager.NET
                     }
 
                     //load folders
-                    arrFolders = Directory.GetDirectories(clsConfig.strUploadPath + this.strCurrPath);
+                    arrFolders = Directory.GetDirectories(clsConfig.objDirectoryResolver.UploadDirectory + this.strCurrPath);
                     foreach (string strF in arrFolders)
                     {
                         this.objFItem = new TinyFileManager.NET.clsFileItem();
@@ -219,7 +219,7 @@ namespace TinyFileManager.NET
                     }
 
                     // load files
-                    arrFiles = Directory.GetFiles(clsConfig.strUploadPath + this.strCurrPath);
+                    arrFiles = Directory.GetFiles(clsConfig.objDirectoryResolver.UploadDirectory + this.strCurrPath);
                     foreach (string strF in arrFiles)
                     {
                         this.objFItem = new TinyFileManager.NET.clsFileItem();

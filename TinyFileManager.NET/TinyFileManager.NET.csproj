@@ -20,6 +20,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -197,6 +201,7 @@
     <Compile Include="classes\clsConfig.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="classes\clsDefaultDirectoryResolver.cs" />
     <Compile Include="classes\clsFileItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -207,6 +212,7 @@
     <Compile Include="dialog.aspx.designer.cs">
       <DependentUpon>dialog.aspx</DependentUpon>
     </Compile>
+    <Compile Include="interfaces\IDirectoryResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
