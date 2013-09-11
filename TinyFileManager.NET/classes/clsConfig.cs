@@ -218,22 +218,24 @@ namespace TinyFileManager.NET
         }
 
         /// <summary>
-        /// Returns the DirectoryResolver used to get the Thumb and UplaodDirectory
+        /// Returns the full upload drive path
         /// </summary>
-        public static IDirectoryResolver objDirectoryResolver
+        public static string strUploadPath
         {
             get
             {
-                if (_objDirectoryResolver == null)
-                {
-                    _objDirectoryResolver = new clsDefaultDirectoryResolver();
-                }
-
-                return _objDirectoryResolver;
+                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.UploadPath.TrimEnd('\\') + "\\";
             }
-            set
+        }
+
+        /// <summary>
+        /// Returns the full thumb drive path
+        /// </summary>
+        public static string strThumbPath
+        {
+            get
             {
-                _objDirectoryResolver = value;
+                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.ThumbPath.TrimEnd('\\') + "\\";
             }
         }
 
@@ -302,6 +304,39 @@ namespace TinyFileManager.NET
                 return Convert.ToBoolean(Properties.Settings.Default.AllowDeleteFolder);
             }
         }
+
+        /// <summary>
+        /// Returns teh prefix for all ressources (script and css imports) so they can be located
+        /// </summary>
+        public static string strRessourcePrefix
+        {
+            get
+            {
+                return Properties.Settings.Default.RessourcePrefix;
+            }
+        }
+
+        /// <summary>
+        /// Returns the DirectoryResolver used to get the Thumb and UplaodDirectory
+        /// </summary>
+        public static IDirectoryResolver objDirectoryResolver
+        {
+            get
+            {
+                if (_objDirectoryResolver == null)
+                {
+                    _objDirectoryResolver = new clsDefaultDirectoryResolver();
+                }
+
+                return _objDirectoryResolver;
+            }
+            set
+            {
+                _objDirectoryResolver = value;
+            }
+        }
+        
+        
         #endregion
 
         private static string[] getArrayFromString(string strInput)
@@ -313,16 +348,16 @@ namespace TinyFileManager.NET
                 strTemp = strInput.Trim('\'');
                 arrExt = strTemp.Split(new string[] {"'",",","'"}, StringSplitOptions.RemoveEmptyEntries);
 
-                
-
                 return arrExt;
         }   // getArrayFromString
 
         #region Fields
         private static IDirectoryResolver _objDirectoryResolver;
+
         #endregion
 
     }   // class
 
     
 }   // namespace
+

@@ -1,37 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using TinyFileManager.NET.enums;
 using TinyFileManager.NET.interfaces;
 
 namespace TinyFileManager.NET.classes
 {
     internal sealed class clsDefaultDirectoryResolver : IDirectoryResolver
     {
-        /// <summary>
-        /// Returns the root directory path for uploads set in the web.config
-        /// Can differ per Request
-        /// </summary>
-        /// <returns>the root directory as string</returns>
-        public string UploadDirectory
+
+        public void CreateDirectory(string relSubFolder, DirectoryType type)
         {
-            get
-            {
-                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.UploadPath.TrimEnd('\\') + "\\";
-            }
+            Directory.CreateDirectory(GetAbsolutePath(relSubFolder, type));
+        }
+
+        public string GetAbsolutePath(string relPath, DirectoryType type)
+        {
+            string strPathBase = type == DirectoryType.Upload ? clsConfig.strUploadPath : clsConfig.strThumbPath;
+
+            return strPathBase + "\\" + relPath;
+        }
+
+        public void DeleteFile(string relFilePath, DirectoryType type)
+        {
+            File.Delete(GetAbsolutePath(relFilePath, type));
+        }
+
+        public void DeleteDirectory(string relPath, DirectoryType type)
+        {
+            Directory.Delete(GetAbsolutePath(relPath, type));
+        }
+
+        public bool FileExists(string relFilePath, DirectoryType type)
+        {
+            return File.Exists(GetAbsolutePath(relFilePath, type));
+        }
+
+        public string[] GetDirectoriesRelative(string relPath, DirectoryType type)
+        {
+            return Directory.GetDirectories(GetAbsolutePath(relPath, type)).AsEnumerable<string>().Select(m => GetRelativePath(m, type)).ToArray();
+        }
+
+        public string[] GetFiles(string relPath, DirectoryType type)
+        {
+            return Directory.GetFiles(GetAbsolutePath(relPath, type)).AsEnumerable<string>().Select(m => GetRelativePath(m, type)).ToArray();
         }
 
         /// <summary>
-        /// Returns the root directory path for thumbs set in the web.config
-        /// Can differ per Request
+        /// converts a absolute path to a relative path 
         /// </summary>
-        /// <returns>the root directory as string</returns>
-        public string ThumbsDirectory
+        /// <param name="absPath"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private string GetRelativePath(string absPath, DirectoryType type)
         {
-            get
-            {
-                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.ThumbPath.TrimEnd('\\') + "\\";
-            }
+            string strPathBase = type == DirectoryType.Upload ? clsConfig.strUploadPath : clsConfig.strThumbPath;
+
+            return absPath.Replace(strPathBase + "\\", "");
+        }
+
+
+        public string GetParentRelative(string relPath, DirectoryType type)
+        {
+            return GetRelativePath(Directory.GetParent(GetAbsolutePath(relPath, type)).FullName, type);
         }
     }
 }

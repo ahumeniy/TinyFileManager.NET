@@ -6,51 +6,51 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex,nofollow">
         <title>Tiny File Manager</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="css/bootstrap-lightbox.min.css" rel="stylesheet" type="text/css" />
-        <link href="css/style.css" rel="stylesheet" type="text/css" />
-		<link href="css/dropzone.css" type="text/css" rel="stylesheet" />
-        <script type="text/javascript" src="js/jquery.1.9.1.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap-lightbox.min.js"></script>
-		<script type="text/javascript" src="js/dropzone.min.js"></script>
-		<script>
-	    	var ext_img=new Array(<% Response.Write(TinyFileManager.NET.clsConfig.strAllowedImageExtensions); %>);
-	    	var allowed_ext=new Array(<% Response.Write(TinyFileManager.NET.clsConfig.strAllowedAllExtensions); %>);
+        <link href="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>css/bootstrap-lightbox.min.css" rel="stylesheet" type="text/css" />
+        <link href="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>css/style.css" rel="stylesheet" type="text/css" />
+        <link href="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>css/dropzone.css" type="text/css" rel="stylesheet" />
+        <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/jquery.1.9.1.min.js"></script>
+        <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/bootstrap-lightbox.min.js"></script>
+        <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/dropzone.min.js"></script>
+        <script>
+            var ext_img=new Array(<% Response.Write(TinyFileManager.NET.clsConfig.strAllowedImageExtensions); %>);
+            var allowed_ext=new Array(<% Response.Write(TinyFileManager.NET.clsConfig.strAllowedAllExtensions); %>);
             var track = '<% Response.Write(this.strEditor); %>';
             var curr_dir = '<% Response.Write(this.strCurrPath.Replace("\\", "\\\\")); %>';
 
-			//dropzone config
-			Dropzone.options.myAwesomeDropzone = {
-				dictInvalidFileType: "File extension is not allowed",
-				dictFileTooBig: "The upload exceeds the max filesize allowed",
-				dictResponseError: "SERVER ERROR",
-				paramName: "file", // The name that will be used to transfer the file
-				maxFilesize: <% Response.Write(TinyFileManager.NET.clsConfig.intMaxUploadSizeMb); %>, // MB
-				accept: function(file, done) {
-				    var extension=file.name.split('.').pop();
-				    if ($.inArray(extension, allowed_ext) > -1) {
-				        done();
-				    } else { 
+            //dropzone config
+            Dropzone.options.myAwesomeDropzone = {
+                dictInvalidFileType: "File extension is not allowed",
+                dictFileTooBig: "The upload exceeds the max filesize allowed",
+                dictResponseError: "SERVER ERROR",
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: <% Response.Write(TinyFileManager.NET.clsConfig.intMaxUploadSizeMb); %>, // MB
+                accept: function(file, done) {
+                    var extension=file.name.split('.').pop();
+                    if ($.inArray(extension, allowed_ext) > -1) {
+                        done();
+                    } else { 
                         done("File extension is not allowed"); 
                     }
-				}
-			};
-	    </script>
-		<script type="text/javascript" src="js/include.js"></script>
+                }
+            };
+        </script>
+        <script type="text/javascript" src="js/include.js"></script>
     </head>
     <body>
-		
+        
 <!----- uploader div start ------->
         <div class="uploader">            
-	        <form action="dialog.aspx?cmd=upload" id="myAwesomeDropzone" class="dropzone">
-		        <input type="hidden" name="folder" value="<% Response.Write(this.strCurrPath); %>"/>
-		        <div class="fallback">
-	    	        <input name="file" type="file" multiple />
-	  	        </div>
-	        </form>
-	        <center><button class="btn btn-large btn-primary close-uploader"><i class="icon-backward icon-white"></i> Return to files list</button></center>
-	        <div class="space10"></div><div class="space10"></div>
+            <form action="dialog.aspx?cmd=upload" id="myAwesomeDropzone" class="dropzone">
+                <input type="hidden" name="folder" value="<% Response.Write(this.strCurrPath); %>"/>
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                </div>
+            </form>
+            <center><button class="btn btn-large btn-primary close-uploader"><i class="icon-backward icon-white"></i> Return to files list</button></center>
+            <div class="space10"></div><div class="space10"></div>
         </div>
 <!----- uploader div end ------->
 
@@ -58,17 +58,17 @@
           
           
 <!----- header div start ------->
-			<div class="filters">
+            <div class="filters">
 <% if (TinyFileManager.NET.clsConfig.boolAllowUploadFile) { %>
                 <button class="btn btn-primary upload-btn" style="margin-left:5px;"><i class="icon-upload icon-white"></i> Upload a file</button> 
 <% } %>
 <% if (TinyFileManager.NET.clsConfig.boolAllowCreateFolder)
    { %>
-			    <button class="btn new-folder" style="margin-left:5px;"><i class="icon-folder-open"></i> New Folder</button> 
+                <button class="btn new-folder" style="margin-left:5px;"><i class="icon-folder-open"></i> New Folder</button> 
 <% } %>
 <% if ((Convert.ToInt32(this.strType) != 1) && (Convert.ToInt32(this.strType) < 3)) { // not only image or only video %>
                 <div class="pull-right">Filter: &nbsp;&nbsp;
-			        <input id="select-type-all" name="radio-sort" type="radio" data-item="ff-item-type-all" class="hide" />
+                    <input id="select-type-all" name="radio-sort" type="radio" data-item="ff-item-type-all" class="hide" />
                     <label id="ff-item-type-all" for="select-type-all" class="btn btn-info ff-label-type-all">All</label>
                     &nbsp;
                     <input id="select-type-1" name="radio-sort" type="radio" data-item="ff-item-type-1" checked="checked"  class="hide"  />
@@ -91,11 +91,11 @@
 <!----- header div end ------->
 
 <!----- breadcrumb div start ------->
-			<div class="row-fluid">
-				<ul class="breadcrumb">
+            <div class="row-fluid">
+                <ul class="breadcrumb">
                 <%= this.getBreadCrumb() %>
-				</ul>
-			</div>
+                </ul>
+            </div>
 <!----- breadcrumb div end ------->
             
             <div class="row-fluid ff-container">
@@ -146,12 +146,12 @@
             </div>    
         </div>
         
-	    <!----- lightbox div end ------->    
-	    <div id="previewLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
-		    <div class='lightbox-content'>
-			    <img id="full-img" src="">
-		    </div>    
-	    </div>
-	    <!----- lightbox div end ------->
+        <!----- lightbox div end ------->    
+        <div id="previewLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
+            <div class='lightbox-content'>
+                <img id="full-img" src="">
+            </div>    
+        </div>
+        <!----- lightbox div end ------->
     </body>
 </html>

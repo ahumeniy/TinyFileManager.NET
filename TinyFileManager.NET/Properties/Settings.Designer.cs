@@ -131,5 +131,14 @@ namespace TinyFileManager.NET.Properties {
                 return ((int)(this["MaxUploadSizeMb"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RessourcePrefix {
+            get {
+                return ((string)(this["RessourcePrefix"]));
+            }
+        }
     }
 }
