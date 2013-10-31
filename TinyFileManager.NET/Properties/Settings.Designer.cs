@@ -140,5 +140,14 @@ namespace TinyFileManager.NET.Properties {
                 return ((string)(this["RessourcePrefix"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AllowSearch {
+            get {
+                return ((bool)(this["AllowSearch"]));
+            }
+        }
     }
 }

@@ -63,13 +63,17 @@ function apply(file, type_file) {
     }
     $(target).contents().find('#tinymce').append(fill);
     $(closed).find('.mce-close').trigger('click');
+
+    checkCallBack(file);
 }
 
 function apply_link(file,type_file){
 	$('.mce-link_'+track, window.parent.document).val(file);
 	var closed = window.parent.document.getElementsByClassName('mce-tinyfilemanager.net');
 	if($('.mce-text_'+track, window.parent.document).val()=='') $('.mce-text_'+track, window.parent.document).val(file.replace(/\..+$/, ''));
-    $(closed).find('.mce-close').trigger('click');
+	$(closed).find('.mce-close').trigger('click');
+
+	checkCallBack(file);
 }
 
 function apply_img(file,type_file){
@@ -77,13 +81,17 @@ function apply_img(file,type_file){
 	var closed = window.parent.document.getElementsByClassName('mce-tinyfilemanager.net');
     $(target).val(file);
     $(closed).find('.mce-close').trigger('click');
+
+    checkCallBack(file);
 }
 
-function apply_video(file,type_file){
+function apply_video(file, type_file) {
     var target = window.parent.document.getElementsByClassName('mce-video'+ type_file +'_'+track);
 	var closed = window.parent.document.getElementsByClassName('mce-tinyfilemanager.net');
     $(target).val(file);
     $(closed).find('.mce-close').trigger('click');
+
+    checkCallBack(file);
 }
 
 function removeVariableFromURL(url_string, variable_name) {
@@ -95,4 +103,10 @@ function removeVariableFromURL(url_string, variable_name) {
     URL = URL.replace(/(\?|&)$/, '');
     regex = null;
     return URL;
+}
+
+function checkCallBack(file) {
+    if (window[callback] !== undefined) {
+        window[callback](file);
+    }
 }

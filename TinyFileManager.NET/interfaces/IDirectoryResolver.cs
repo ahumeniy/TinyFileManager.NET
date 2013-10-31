@@ -62,5 +62,19 @@ namespace TinyFileManager.NET.interfaces
         /// <param name="type"></param>
         /// <returns></returns>
         string GetParentRelative(string relPath, DirectoryType type);
+
+        /// <summary>
+        /// Returns if the folder can be deleted
+        /// </summary>
+        /// <param name="relPath"></param>
+        /// <returns></returns>
+        bool CanDeleteFile(string relPath);
+
+        /// <summary>
+        /// Returns if the folder can be deleted
+        /// </summary>
+        /// <param name="relPath"></param>
+        /// <returns></returns>
+        bool CanDeleteFolder(string relPath);
     }
 }

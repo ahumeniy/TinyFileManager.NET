@@ -14,11 +14,12 @@
         <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/bootstrap-lightbox.min.js"></script>
         <script type="text/javascript" src="<%Response.Write(TinyFileManager.NET.clsConfig.strRessourcePrefix);%>js/dropzone.min.js"></script>
-        <script>
+        <script type="text/javascript">
             var ext_img=new Array(<% Response.Write(TinyFileManager.NET.clsConfig.strAllowedImageExtensions); %>);
             var allowed_ext=new Array(<% Response.Write(TinyFileManager.NET.clsConfig.strAllowedAllExtensions); %>);
             var track = '<% Response.Write(this.strEditor); %>';
             var curr_dir = '<% Response.Write(this.strCurrPath.Replace("\\", "\\\\")); %>';
+            var callback = '<% Response.Write(this.strCallback); %>';
 
             //dropzone config
             Dropzone.options.myAwesomeDropzone = {
@@ -60,31 +61,44 @@
 <!----- header div start ------->
             <div class="filters">
 <% if (TinyFileManager.NET.clsConfig.boolAllowUploadFile) { %>
-                <button class="btn btn-primary upload-btn" style="margin-left:5px;"><i class="icon-upload icon-white"></i> Upload a file</button> 
+                <button class="btn btn-primary upload-btn" style="margin-left:5px;"><i class="icon-upload icon-white"></i> <%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Upload a file")); %></button> 
 <% } %>
 <% if (TinyFileManager.NET.clsConfig.boolAllowCreateFolder)
    { %>
-                <button class="btn new-folder" style="margin-left:5px;"><i class="icon-folder-open"></i> New Folder</button> 
+                <button class="btn new-folder" style="margin-left:5px;"><i class="icon-folder-open"></i> <% Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("New Folder")); %></button> 
 <% } %>
+
 <% if ((Convert.ToInt32(this.strType) != 1) && (Convert.ToInt32(this.strType) < 3)) { // not only image or only video %>
-                <div class="pull-right">Filter: &nbsp;&nbsp;
+                <div class="pull-right"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Filter")); %>: &nbsp;&nbsp;
                     <input id="select-type-all" name="radio-sort" type="radio" data-item="ff-item-type-all" class="hide" />
-                    <label id="ff-item-type-all" for="select-type-all" class="btn btn-info ff-label-type-all">All</label>
+                    <label id="ff-item-type-all" for="select-type-all" class="btn btn-info ff-label-type-all"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("All")); %></label>
                     &nbsp;
                     <input id="select-type-1" name="radio-sort" type="radio" data-item="ff-item-type-1" checked="checked"  class="hide"  />
-                    <label id="ff-item-type-1" for="select-type-1" class="btn ff-label-type-1">Files</label>
+                    <label id="ff-item-type-1" for="select-type-1" class="btn ff-label-type-1"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Files")); %></label>
                     &nbsp;
                     <input id="select-type-2" name="radio-sort" type="radio" data-item="ff-item-type-2" class="hide"  />
-                    <label id="ff-item-type-2" for="select-type-2" class="btn ff-label-type-2">Images</label>
+                    <label id="ff-item-type-2" for="select-type-2" class="btn ff-label-type-2"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Images")); %></label>
                     &nbsp;
                     <input id="select-type-3" name="radio-sort" type="radio" data-item="ff-item-type-3" class="hide"  />
-                    <label id="ff-item-type-3" for="select-type-3" class="btn ff-label-type-3">Archives</label>
+                    <label id="ff-item-type-3" for="select-type-3" class="btn ff-label-type-3"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Archives")); %></label>
                     &nbsp;
                     <input id="select-type-4" name="radio-sort" type="radio" data-item="ff-item-type-4" class="hide"  />
-                    <label id="ff-item-type-4" for="select-type-4" class="btn ff-label-type-4">Videos</label>
+                    <label id="ff-item-type-4" for="select-type-4" class="btn ff-label-type-4"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Videos")); %></label>
                     &nbsp;
                     <input id="select-type-5" name="radio-sort" type="radio" data-item="ff-item-type-5" class="hide"  />
-                    <label id="ff-item-type-5" for="select-type-5" class="btn ff-label-type-5">Music</label>
+                    <label id="ff-item-type-5" for="select-type-5" class="btn ff-label-type-5"><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Music")); %></label>
+                
+<% if (TinyFileManager.NET.clsConfig.boolAllowSearch) 
+   {%>
+                    <form style="display:inline;" method="post" action="<% Response.Write(this.strCurrLink + "&currpath=" + this.strCurrPath + "&cmd=search"); %>">
+                        &nbsp;
+                        <div class="verticalLine"></div>
+                        &nbsp; 
+                        <input class="span2 search" type="text" name="query" placeholder="<%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Search")); %>" />
+                        <button type="submit" class="btn" style="margin-left:5px; height:100%;" title="<%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Search")); %>"><i class="icon-search icon-fit"></i></button> 
+                    </form>
+<% } %>
+                
                 </div>
 <% } %>
             </div>
@@ -124,7 +138,7 @@
                                 // if file
                                 Response.Write(objF.strDownFormOpen);
                                 Response.Write("<div class=\"btn-group toolbox\">");
-                                Response.Write("<button type=\"submit\" title=\"Download\" class=\"btn\"><i class=\"icon-download\"></i></button>");
+                                Response.Write("<button type=\"submit\" title=\"" + TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Download") + "\" class=\"btn\"><i class=\"icon-download\"></i></button>");
                                 Response.Write(objF.strPreviewLink);
                                 Response.Write(objF.strDeleteLink);
                                 Response.Write("</div>");
