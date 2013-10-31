@@ -60,7 +60,8 @@
           
 <!----- header div start ------->
             <div class="filters">
-<% if (TinyFileManager.NET.clsConfig.boolAllowUploadFile) { %>
+<% if (TinyFileManager.NET.clsConfig.boolAllowUploadFile && TinyFileManager.NET.clsConfig.objDirectoryResolver.CanUploadFile(this.strCurrPath))
+   { %>
                 <button class="btn btn-primary upload-btn" style="margin-left:5px;"><i class="icon-upload icon-white"></i> <%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Upload a file")); %></button> 
 <% } %>
 <% if (TinyFileManager.NET.clsConfig.boolAllowCreateFolder)

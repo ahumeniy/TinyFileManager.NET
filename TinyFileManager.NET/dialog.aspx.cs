@@ -122,6 +122,14 @@ namespace TinyFileManager.NET
 
                 case "upload":
                     strFolder = Request.Form["folder"] + "";
+
+                    if (!clsConfig.objDirectoryResolver.CanUploadFile(strFolder))
+                    {
+                        Response.End();
+                        break;
+                    }
+
+
                     HttpPostedFile filUpload = Request.Files["file"];
                     string strTargetFile;
                     string strThumbFile;
