@@ -20,7 +20,7 @@ namespace TinyFileManager.NET.classes
         {
             string strPathBase = type == DirectoryType.Upload ? clsConfig.strUploadPath : clsConfig.strThumbPath;
 
-            return strPathBase + "\\" + relPath;
+            return strPathBase + relPath;
         }
 
         public void DeleteFile(string relFilePath, DirectoryType type)
@@ -40,12 +40,26 @@ namespace TinyFileManager.NET.classes
 
         public string[] GetDirectoriesRelative(string relPath, DirectoryType type)
         {
-            return Directory.GetDirectories(GetAbsolutePath(relPath, type)).AsEnumerable<string>().Select(m => GetRelativePath(m, type)).ToArray();
+            try
+            {
+                return Directory.GetDirectories(GetAbsolutePath(relPath, type)).AsEnumerable<string>().Select(m => GetRelativePath(m, type)).ToArray();
+            }
+            catch
+            {
+                return new string[0];
+            }
         }
 
         public string[] GetFiles(string relPath, DirectoryType type)
         {
-            return Directory.GetFiles(GetAbsolutePath(relPath, type)).AsEnumerable<string>().Select(m => GetRelativePath(m, type)).ToArray();
+            try
+            {
+                return Directory.GetFiles(GetAbsolutePath(relPath, type)).AsEnumerable<string>().Select(m => GetRelativePath(m, type)).ToArray();
+            }
+            catch
+            {
+                return new string[0];
+            }
         }
 
         /// <summary>
@@ -58,13 +72,22 @@ namespace TinyFileManager.NET.classes
         {
             string strPathBase = type == DirectoryType.Upload ? clsConfig.strUploadPath : clsConfig.strThumbPath;
 
-            return absPath.Replace(strPathBase + "\\", "");
+            return absPath.Replace(strPathBase, "");
         }
-
 
         public string GetParentRelative(string relPath, DirectoryType type)
         {
             return GetRelativePath(Directory.GetParent(GetAbsolutePath(relPath, type)).FullName, type);
+        }
+
+        public bool CanDeleteFile(string relPath)
+        {
+            return clsConfig.boolAllowDeleteFile;
+        }
+
+        public bool CanDeleteFolder(string relPath)
+        {
+            return clsConfig.boolAllowDeleteFolder;
         }
     }
 }

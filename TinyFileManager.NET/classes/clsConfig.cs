@@ -284,6 +284,17 @@ namespace TinyFileManager.NET
         }
 
         /// <summary>
+        /// Returns the setting for allowing search
+        /// </summary>
+        public static bool boolAllowSearch
+        {
+            get
+            {
+                return Convert.ToBoolean(Properties.Settings.Default.AllowSearch);
+            }
+        }
+
+        /// <summary>
         /// Returns the setting for allowing creation of folder
         /// </summary>
         public static bool boolAllowCreateFolder
@@ -335,8 +346,67 @@ namespace TinyFileManager.NET
                 _objDirectoryResolver = value;
             }
         }
-        
-        
+
+        /// <summary>
+        /// Returns the LocalizationService used localize texts
+        /// </summary>
+        public static ILocalizationService objLocalizationService
+        {
+            get
+            {
+                if (_objLocalizationService == null)
+                {
+                    _objLocalizationService = new clsDefaultLocalizationService();
+                }
+
+                return _objLocalizationService;
+            }
+            set
+            {
+                _objLocalizationService = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the LocalizationService used localize texts
+        /// </summary>
+        public static IDirectorySearchProvider objDirectorySearchProvider
+        {
+            get
+            {
+                if (_objDirectorySearchProvider == null)
+                {
+                    _objDirectorySearchProvider = new clsDefaultDirectorySearchProvider();
+                }
+
+                return _objDirectorySearchProvider;
+            }
+            set
+            {
+                _objDirectorySearchProvider = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the UrlResolver used to resolve urls
+        /// </summary>
+        public static IUrlResolver objUrlResolver
+        {
+            get
+            {
+                if (_objUrlResolver == null)
+                {
+                    _objUrlResolver = new clsDefaultUrlResolver();
+                }
+
+                return _objUrlResolver;
+            }
+            set
+            {
+                _objUrlResolver = value;
+            }
+        }
+
         #endregion
 
         private static string[] getArrayFromString(string strInput)
@@ -353,7 +423,9 @@ namespace TinyFileManager.NET
 
         #region Fields
         private static IDirectoryResolver _objDirectoryResolver;
-
+        private static ILocalizationService _objLocalizationService;
+        private static IDirectorySearchProvider _objDirectorySearchProvider;
+        private static IUrlResolver _objUrlResolver;
         #endregion
 
     }   // class
