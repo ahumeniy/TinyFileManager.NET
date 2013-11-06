@@ -222,14 +222,14 @@ namespace TinyFileManager.NET
                         this.objFItem = new TinyFileManager.NET.clsFileItem();
                         // the name is now the full relative path minus the current path to display subfolders in the search display
                         // this will not affect anything in the regular view
-                        this.objFItem.strName = (this.strCurrPath.Equals("") ? strF : strF.Replace(this.strCurrPath, "")); 
+                        this.objFItem.strName = (this.strCurrPath.Equals("") ? strF : strF.Replace(this.strCurrPath, ""));
                         this.objFItem.boolIsFolder = true;
                         this.objFItem.intColNum = this.getNextColNum();
                         this.objFItem.strPath = this.strCurrPath + this.objFItem.strName;
                         this.objFItem.strClassType = "dir";
                         if (clsConfig.objDirectoryResolver.CanDeleteFolder(strF))
                         {
-                            this.objFItem.strDeleteLink = "<a href=\"" + this.strCurrLink  + "&cmd=delfolder&folder=" + this.objFItem.strPath + "&currpath=" + this.strCurrPath + "\" class=\"btn erase-button top-right\" onclick=\"return confirm('Are you sure to delete the folder and all the objects in it?');\" title=\"" + clsConfig.objLocalizationService.GetValue("Erase") + "\"><i class=\"icon-trash\"></i></a>";
+                            this.objFItem.strDeleteLink = "<a href=\"" + this.strCurrLink + "&cmd=delfolder&folder=" + this.objFItem.strPath + "&currpath=" + this.strCurrPath + "\" class=\"btn erase-button top-right\" onclick=\"return confirm('Are you sure to delete the folder and all the objects in it?');\" title=\"" + clsConfig.objLocalizationService.GetValue("Erase") + "\"><i class=\"icon-trash\"></i></a>";
                         }
                         else
                         {
@@ -249,7 +249,6 @@ namespace TinyFileManager.NET
                         this.objFItem = new TinyFileManager.NET.clsFileItem();
                         this.objFItem.strName = (this.strCurrPath.Equals("") ? strF : strF.Replace(this.strCurrPath, ""));
                         this.objFItem.boolIsFolder = false;
-                        this.objFItem.intColNum = this.getNextColNum();
                         this.objFItem.strPath = this.strCurrPath + this.objFItem.strName;
                         this.objFItem.boolIsImage = this.isImageFile(fileName);
                         this.objFItem.boolIsVideo = this.isVideoFile(fileName);
@@ -285,6 +284,9 @@ namespace TinyFileManager.NET
                                 }
                             }
                         }
+
+
+
                         // get delete link
                         if (clsConfig.objDirectoryResolver.CanDeleteFile(strF))
                         {
@@ -297,7 +299,7 @@ namespace TinyFileManager.NET
                         // get thumbnail image
                         if (this.objFItem.boolIsImage)
                         {
-                            if (clsConfig.objDirectoryResolver.FileExists(this.objFItem.strPath, DirectoryType.Upload))
+                            if (!clsConfig.objDirectoryResolver.FileExists(this.objFItem.strPath, DirectoryType.Thumbnail))
                             {
                                 createThumbnail(clsConfig.objDirectoryResolver.GetAbsolutePath(this.objFItem.strPath, DirectoryType.Upload), clsConfig.objDirectoryResolver.GetAbsolutePath(this.objFItem.strPath, DirectoryType.Thumbnail));
                             }
@@ -327,8 +329,9 @@ namespace TinyFileManager.NET
                         this.objFItem.strLink = "<a href=\"#\" title=\"" + clsConfig.objLocalizationService.GetValue("Select") + "\" onclick=\"" + this.strApply + "('" + clsConfig.objUrlResolver.GetUrl(this.objFItem.strPath, DirectoryType.Upload) + "'," + this.strType + ")\";\"><img data-src=\"holder.js/140x100\" alt=\"140x100\" src=\"" + this.objFItem.strThumbImage + "\" height=\"100\"><h4>" + this.objFItem.strName + "</h4></a>";
 
                         // check to see if it's the type of file we are looking at
-                        if ((this.boolOnlyImage && this.objFItem.boolIsImage) || (this.boolOnlyVideo && this.objFItem.boolIsVideo) || (!this.boolOnlyImage && !this.boolOnlyVideo)) 
+                        if ((this.boolOnlyImage && this.objFItem.boolIsImage) || (this.boolOnlyVideo && this.objFItem.boolIsVideo) || (!this.boolOnlyImage && !this.boolOnlyVideo))
                         {
+                            this.objFItem.intColNum = this.getNextColNum();
                             this.arrLinks.Add(objFItem);
                         }
                     } // foreach
@@ -348,7 +351,7 @@ namespace TinyFileManager.NET
             strRet = "<li><a href=\"" + this.strCurrLink + "&currpath=\"><i class=\"icon-home\"></i></a>";
             arrFolders = this.strCurrPath.Split('\\');
 
-            foreach (string strFolder in arrFolders) 
+            foreach (string strFolder in arrFolders)
             {
                 if (strFolder != "")
                 {
@@ -453,7 +456,7 @@ namespace TinyFileManager.NET
             int intTargH = 78;
             int intTargW = 156;
 
-            if ((intOldHeight <= intTargH) && (intOldWidth <= intTargW)) 
+            if ((intOldHeight <= intTargH) && (intOldWidth <= intTargW))
             {
                 // no resize needed
                 intNewHeight = intOldHeight;
@@ -466,7 +469,7 @@ namespace TinyFileManager.NET
             intWDiff = intOldWidth - intTargW;
 
             //whichever is the bigger difference is the chosen proportion
-            if (intHDiff > intWDiff) 
+            if (intHDiff > intWDiff)
             {
                 decProp = (decimal)intTargH / (decimal)intOldHeight;
                 intNewHeight = intTargH;
@@ -485,7 +488,7 @@ namespace TinyFileManager.NET
             return false;
         } // ThumbnailCallback
 
-        public string getEndOfLine(int intColNum) 
+        public string getEndOfLine(int intColNum)
         {
             if (intColNum == 6)
             {
@@ -497,7 +500,7 @@ namespace TinyFileManager.NET
             }
         } // getEndOfLine
 
-        public string getStartOfLine(int intColNum) 
+        public string getStartOfLine(int intColNum)
         {
             if (intColNum == 1)
             {
