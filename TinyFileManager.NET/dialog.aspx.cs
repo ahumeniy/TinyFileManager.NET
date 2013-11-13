@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.IO;
 using TinyFileManager.NET.enums;
+using System.Collections.Specialized;
 
 namespace TinyFileManager.NET
 {
@@ -22,7 +23,6 @@ namespace TinyFileManager.NET
         public string strEditor;
         public string strCurrPath;
         public string strCallback;
-        public string strCurrLink;      // dialog.aspx?editor=.... for simplicity
         public ArrayList arrLinks = new ArrayList();
 
         private int intColNum;
@@ -75,9 +75,6 @@ namespace TinyFileManager.NET
                     }
                     break;
             }
-
-            //setup current link
-            strCurrLink = "dialog.aspx?type=" + this.strType + "&callback=" + strCallback + "&editor=" + this.strEditor + "&lang=" + this.strLang;
 
             switch (strCmd)
             {
@@ -214,7 +211,7 @@ namespace TinyFileManager.NET
                         this.objFItem.strClassType = "dir";
                         this.objFItem.strDeleteLink = "";//= "<a class=\"btn erase-button top-right disabled\" title=\"Erase\"><i class=\"icon-trash\"></i></a>";
                         this.objFItem.strThumbImage = "img/ico/folder_return.png";
-                        this.objFItem.strLink = "<a title=\"" + clsConfig.objLocalizationService.GetValue("Open") + "\" href=\"" + this.strCurrLink + "&currpath=" + this.objFItem.strPath + "\"><img class=\"directory-img\" src=\"" + this.objFItem.strThumbImage + "\" alt=\"folder\" /><h3>..</h3></a>";
+                        this.objFItem.strLink = "<a title=\"" + clsConfig.objLocalizationService.GetValue("Open") + "\" href=\"" + getLink(new NameValueCollection() { { "currpath", this.objFItem.strPath } }) + "\"><img class=\"directory-img\" src=\"" + this.objFItem.strThumbImage + "\" alt=\"folder\" /><h3>..</h3></a>";
                         this.arrLinks.Add(objFItem);
                     }
 
@@ -245,14 +242,14 @@ namespace TinyFileManager.NET
                         this.objFItem.strClassType = "dir";
                         if (clsConfig.objDirectoryResolver.CanDeleteFolder(strF))
                         {
-                            this.objFItem.strDeleteLink = "<a href=\"" + this.strCurrLink + "&cmd=delfolder&folder=" + this.objFItem.strPath + "&currpath=" + this.strCurrPath + "\" class=\"btn erase-button top-right\" onclick=\"return confirm('Are you sure to delete the folder and all the objects in it?');\" title=\"" + clsConfig.objLocalizationService.GetValue("Erase") + "\"><i class=\"icon-trash\"></i></a>";
+                            this.objFItem.strDeleteLink = "<a href=\"" + getLink(new NameValueCollection() { { "cmd", "delfolder" }, { "folder", this.objFItem.strPath } }) + "\" class=\"btn erase-button top-right\" onclick=\"return confirm('" + clsConfig.objLocalizationService.GetValue("Are you sure to delete the folder and all the objects in it?") + "');\" title=\"" + clsConfig.objLocalizationService.GetValue("Erase") + "\"><i class=\"icon-trash\"></i></a>";
                         }
                         else
                         {
                             this.objFItem.strDeleteLink = "<a class=\"btn erase-button top-right disabled\" title=\"" + clsConfig.objLocalizationService.GetValue("Erase") + "\"><i class=\"icon-trash\"></i></a>";
                         }
                         this.objFItem.strThumbImage = "img/ico/folder.png";
-                        this.objFItem.strLink = "<a title=\"" + clsConfig.objLocalizationService.GetValue("Open") + "\" href=\"" + this.strCurrLink + "&currpath=" + this.objFItem.strPath + "\"><img class=\"directory-img\" src=\"" + this.objFItem.strThumbImage + "\" alt=\"folder\" /><h3>" + this.objFItem.strName + "</h3></a>";
+                        this.objFItem.strLink = "<a title=\"" + clsConfig.objLocalizationService.GetValue("Open") + "\" href=\"" + getLink(new NameValueCollection() { { "currpath", this.objFItem.strPath } }) + "\"><img class=\"directory-img\" src=\"" + this.objFItem.strThumbImage + "\" alt=\"folder\" /><h3>" + this.objFItem.strName + "</h3></a>";
                         this.arrLinks.Add(objFItem);
                     }
 
@@ -306,7 +303,7 @@ namespace TinyFileManager.NET
                         // get delete link
                         if (clsConfig.objDirectoryResolver.CanDeleteFile(strF))
                         {
-                            this.objFItem.strDeleteLink = "<a href=\"" + this.strCurrLink + "&cmd=delfile&file=" + this.objFItem.strPath + "&currpath=" + this.strCurrPath + "\" class=\"btn erase-button\" onclick=\"return confirm('Are you sure to delete this file?');\" title=\"Erase\"><i class=\"icon-trash\"></i></a>";
+                            this.objFItem.strDeleteLink = "<a href=\"" + getLink(new NameValueCollection() { { "cmd", "delfile" }, { "file", this.objFItem.strPath } }) + "\" class=\"btn erase-button\" onclick=\"return confirm('Are you sure to delete this file?');\" title=\"Erase\"><i class=\"icon-trash\"></i></a>";
                         }
                         else
                         {
@@ -333,7 +330,7 @@ namespace TinyFileManager.NET
                                 this.objFItem.strThumbImage = "img/ico/Default.png";
                             }
                         }
-                        this.objFItem.strDownFormOpen = "<form action=\"dialog.aspx?cmd=download&file=" + this.objFItem.strPath + "\" method=\"post\" class=\"download-form\">";
+                        this.objFItem.strDownFormOpen = "<form action=\"" + getLink(new NameValueCollection() { { "cmd", "download" }, { "file", this.objFItem.strPath } }) + "\" method=\"post\" class=\"download-form\">";
                         if (this.objFItem.boolIsImage)
                         {
                             this.objFItem.strPreviewLink = "<a class=\"btn preview\" title=\"" + clsConfig.objLocalizationService.GetValue("Preview") + "\" data-url=\"" + clsConfig.objUrlResolver.GetUrl(this.objFItem.strPath, DirectoryType.Upload) + "\" data-toggle=\"lightbox\" href=\"#previewLightbox\"><i class=\"icon-eye-open\"></i></a>";
@@ -357,6 +354,46 @@ namespace TinyFileManager.NET
 
         }   // page load
 
+        public string getLink(NameValueCollection param)
+        {
+            Dictionary<string, string> requestParams = ToDictionary(HttpContext.Current.Request.QueryString);
+
+
+            foreach (string key in param.AllKeys)
+            {
+                if (requestParams.ContainsKey(key))
+                {
+                    requestParams[key] = param[key];
+                }
+                else
+                {
+                    requestParams.Add(key, param[key]);
+                }
+            }
+
+            // allways remove the command so we dont get any sideeffects
+            if (param["cmd"] == null && requestParams.ContainsKey("cmd"))
+            {
+                requestParams.Remove("cmd");
+            }
+
+            return "dialog.aspx?" + String.Join("&", requestParams.Select(x => x.Key + "=" + x.Value));
+        }
+
+        #region extension methods
+        private Dictionary<string, string> ToDictionary(NameValueCollection nvcoll)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            foreach (string key in nvcoll)
+            {
+                dic.Add(key, nvcoll[key]);
+            }
+
+            return dic;
+        }
+        #endregion
+
         public string getBreadCrumb()
         {
             string strRet;
@@ -364,7 +401,7 @@ namespace TinyFileManager.NET
             string strTempPath = "";
             int intCount = 0;
 
-            strRet = "<li><a href=\"" + this.strCurrLink + "&currpath=\"><i class=\"icon-home\"></i></a>";
+            strRet = "<li><a href=\"" + getLink(new NameValueCollection() { { "currpath", "" } }) + "\"><i class=\"icon-home\"></i></a>";
             arrFolders = this.strCurrPath.Split('\\');
 
             foreach (string strFolder in arrFolders)
@@ -380,7 +417,7 @@ namespace TinyFileManager.NET
                     }
                     else
                     {
-                        strRet += " <span class=\"divider\">/</span></li> <li><a href=\"" + this.strCurrLink + "&currpath=" + strTempPath + "\">" + strFolder + "</a>";
+                        strRet += " <span class=\"divider\">/</span></li> <li><a href=\"" + getLink(new NameValueCollection() { { "currpath", strTempPath } }) + "\">" + strFolder + "</a>";
                     }
                 }
             }   // foreach

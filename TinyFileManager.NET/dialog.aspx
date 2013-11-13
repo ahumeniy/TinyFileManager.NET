@@ -96,7 +96,7 @@
 
                 <% if (TinyFileManager.NET.clsConfig.boolAllowSearch)
                    {%>
-                <form style="display: inline;" method="post" action="<% Response.Write(this.strCurrLink + "&currpath=" + this.strCurrPath + "&cmd=search"); %>">
+                <form style="display: inline;" method="post" action="<% Response.Write(getLink(new NameValueCollection() { { "cmd", "search" } })); %>">
                     &nbsp;
                         <div class="verticalLine"></div>
                     &nbsp; 
