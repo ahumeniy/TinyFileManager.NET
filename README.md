@@ -1,3 +1,9 @@
+### NOTE
+This is a fork i made to allow external manipulation of the TinyFileManager such as localization, directory resolving etc.
+
+You can do this by writing you own implementations of the given interfaces and overwriting the default object in the clsConfig.
+
+---------------------------------
 ### TinyFileManager.NET
 
 ####Demo and documentation resides here: http://www.andyarndt.net/TinyFileManager.aspx
