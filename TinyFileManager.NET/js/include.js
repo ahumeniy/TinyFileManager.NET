@@ -106,7 +106,7 @@ function removeVariableFromURL(url_string, variable_name) {
 }
 
 function checkCallBack(file) {
-    if (window[callback] !== undefined) {
-        window[callback](file);
+    if (window.parent[callback] !== undefined) {
+        window.parent[callback](file);
     }
 }
