@@ -103,8 +103,10 @@ namespace TinyFileManager.NET
                     break;
                 case "createfolder":
 
+                    strFolder = Request.Form["folder"] + "";
+
                     // end response if we dont't want folders beeing created in this folder
-                    if (!clsConfig.objDirectoryResolver.CanCreateFolderInFolder(strCurrPath))
+                    if (!clsConfig.objDirectoryResolver.CanCreateFolderInFolder(strFolder))
                     {
                         Response.End();
                         break;
@@ -112,7 +114,6 @@ namespace TinyFileManager.NET
 
                     try
                     {
-                        strFolder = Request.Form["folder"] + "";
                         //forge ahead without checking for existence
                         //catch will save us
                         clsConfig.objDirectoryResolver.CreateDirectory(strFolder, DirectoryType.Upload);
@@ -131,7 +132,7 @@ namespace TinyFileManager.NET
                     strFolder = Request.Form["folder"] + "";
 
                     // end response if we dont't want files uploaded in this folder
-                    if (!clsConfig.objDirectoryResolver.CanUploadInFolder(strCurrPath))
+                    if (!clsConfig.objDirectoryResolver.CanUploadInFolder(strFolder))
                     {
                         Response.End();
                         break;

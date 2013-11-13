@@ -20,7 +20,7 @@ namespace TinyFileManager.NET.classes
         {
             string strPathBase = type == DirectoryType.Upload ? clsConfig.strUploadPath : clsConfig.strThumbPath;
 
-            return strPathBase + relPath;
+            return (strPathBase + relPath).Replace("\\\\", "\\");
         }
 
         public void DeleteFile(string relFilePath, DirectoryType type)
