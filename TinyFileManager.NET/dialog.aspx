@@ -30,7 +30,7 @@
             maxFilesize: <% Response.Write(TinyFileManager.NET.clsConfig.intMaxUploadSizeMb); %>, // MB
             accept: function(file, done) {
                 var extension=file.name.split('.').pop();
-                if ($.inArray(extension, allowed_ext) > -1) {
+                if ($.inArray(extension.toLowerCase(), allowed_ext) > -1) {
                     done();
                 } else { 
                     done("File extension is not allowed"); 
@@ -62,11 +62,11 @@
 
         <!----- header div start ------->
         <div class="filters">
-            <% if (TinyFileManager.NET.clsConfig.boolAllowUploadFile)
+            <% if (TinyFileManager.NET.clsConfig.boolAllowUploadFile && TinyFileManager.NET.clsConfig.objDirectoryResolver.CanUploadInFolder(strCurrPath))
                { %>
             <button class="btn btn-primary upload-btn" style="margin-left: 5px;"><i class="icon-upload icon-white"></i><%Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("Upload a file")); %></button>
             <% } %>
-            <% if (TinyFileManager.NET.clsConfig.boolAllowCreateFolder)
+            <% if (TinyFileManager.NET.clsConfig.boolAllowCreateFolder && TinyFileManager.NET.clsConfig.objDirectoryResolver.CanCreateFolderInFolder(strCurrPath))
                { %>
             <button class="btn new-folder" style="margin-left: 5px;"><i class="icon-folder-open"></i><% Response.Write(TinyFileManager.NET.clsConfig.objLocalizationService.GetValue("New Folder")); %></button>
             <% } %>

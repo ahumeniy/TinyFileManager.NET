@@ -317,7 +317,7 @@ namespace TinyFileManager.NET
         }
 
         /// <summary>
-        /// Returns teh prefix for all ressources (script and css imports) so they can be located
+        /// Returns the prefix for all ressources (script and css imports) so they can be located
         /// </summary>
         public static string strRessourcePrefix
         {
@@ -411,14 +411,14 @@ namespace TinyFileManager.NET
 
         private static string[] getArrayFromString(string strInput)
         {
-                string[] arrExt;
-                string strTemp;
+            string[] arrExt;
+            string strTemp;
 
-                //remove lead and trail single quotes so we can SPLIT the hell out of it
-                strTemp = strInput.Trim('\'');
-                arrExt = strTemp.Split(new string[] {"'",",","'"}, StringSplitOptions.RemoveEmptyEntries);
+            //remove lead and trail single quotes so we can SPLIT the hell out of it
+            strTemp = strInput.Trim('\'');
+            arrExt = strTemp.Split(new string[] { "'", ",", "'" }, StringSplitOptions.RemoveEmptyEntries);
 
-                return arrExt;
+            return arrExt;
         }   // getArrayFromString
 
         #region Fields
@@ -430,6 +430,6 @@ namespace TinyFileManager.NET
 
     }   // class
 
-    
+
 }   // namespace
 

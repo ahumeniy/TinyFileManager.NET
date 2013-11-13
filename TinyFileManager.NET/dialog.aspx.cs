@@ -34,7 +34,6 @@ namespace TinyFileManager.NET
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             strCmd = Request.QueryString["cmd"] + "";
             strType = Request.QueryString["type"] + "";
             strFolder = Request.QueryString["folder"] + "";
@@ -103,6 +102,14 @@ namespace TinyFileManager.NET
                     Response.End();
                     break;
                 case "createfolder":
+
+                    // end response if we dont't want folders beeing created in this folder
+                    if (!clsConfig.objDirectoryResolver.CanCreateFolderInFolder(strCurrPath))
+                    {
+                        Response.End();
+                        break;
+                    }
+
                     try
                     {
                         strFolder = Request.Form["folder"] + "";
@@ -122,6 +129,14 @@ namespace TinyFileManager.NET
 
                 case "upload":
                     strFolder = Request.Form["folder"] + "";
+
+                    // end response if we dont't want files uploaded in this folder
+                    if (!clsConfig.objDirectoryResolver.CanUploadInFolder(strCurrPath))
+                    {
+                        Response.End();
+                        break;
+                    }
+
                     HttpPostedFile filUpload = Request.Files["file"];
                     string strTargetFile;
                     string strThumbFile;

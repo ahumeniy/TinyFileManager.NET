@@ -89,5 +89,15 @@ namespace TinyFileManager.NET.classes
         {
             return clsConfig.boolAllowDeleteFolder;
         }
+
+        public bool CanUploadInFolder(string relPath)
+        {
+            return true;
+        }
+
+        public bool CanCreateFolderInFolder(string relPath)
+        {
+            return true;
+        }
     }
 }

@@ -76,5 +76,19 @@ namespace TinyFileManager.NET.interfaces
         /// <param name="relPath"></param>
         /// <returns></returns>
         bool CanDeleteFolder(string relPath);
+
+        /// <summary>
+        /// Returns if the file can be uploaded
+        /// </summary>
+        /// <param name="relPath"></param>
+        /// <returns></returns>
+        bool CanUploadInFolder(string relPath);
+
+        /// <summary>
+        /// Returns if the folder can be created
+        /// </summary>
+        /// <param name="relPath"></param>
+        /// <returns></returns>
+        bool CanCreateFolderInFolder(string relPath);
     }
 }
