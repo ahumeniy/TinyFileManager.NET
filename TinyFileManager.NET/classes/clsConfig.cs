@@ -150,7 +150,7 @@ namespace TinyFileManager.NET
                 {
                     if (strRet.Length > 0)
                     {
-                        strRet += "," + clsConfig.strAllowedImageExtensions;
+                        strRet += "," + clsConfig.strAllowedFileExtensions;
                     }
                     else
                     {
