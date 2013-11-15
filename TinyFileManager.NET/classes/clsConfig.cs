@@ -5,6 +5,7 @@ using System.Web;
 using System.Configuration;
 using TinyFileManager.NET.interfaces;
 using TinyFileManager.NET.classes;
+using System.Web.Configuration;
 
 namespace TinyFileManager.NET
 {
@@ -18,7 +19,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Convert.ToInt32(Properties.Settings.Default.MaxUploadSizeMb);
+                return Convert.ToInt32(WebConfigurationManager.AppSettings["MaxUploadSizeMb"].ToString());
             }
         }
 
@@ -29,7 +30,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Properties.Settings.Default.AllowedImageExtensions;
+                return WebConfigurationManager.AppSettings["AllowedImageExtensions"].ToString();
             }
         }
 
@@ -51,7 +52,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Properties.Settings.Default.AllowedFileExtensions;
+                return WebConfigurationManager.AppSettings["AllowedFileExtensions"].ToString();
             }
         }
 
@@ -73,7 +74,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Properties.Settings.Default.AllowedVideoExtensions;
+                return WebConfigurationManager.AppSettings["AllowedVideoExtensions"].ToString();
             }
         }
 
@@ -95,7 +96,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Properties.Settings.Default.AllowedMusicExtensions;
+                return WebConfigurationManager.AppSettings["AllowedMusicExtensions"].ToString();
             }
         }
 
@@ -117,7 +118,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Properties.Settings.Default.AllowedMiscExtensions;
+                return WebConfigurationManager.AppSettings["AllowedMiscExtensions"].ToString();
             }
         }
 
@@ -224,7 +225,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.UploadPath.TrimEnd('\\') + "\\";
+                return clsConfig.strDocRoot + "\\" + WebConfigurationManager.AppSettings["UploadPath"].ToString().TrimEnd('\\') + "\\";
             }
         }
 
@@ -235,7 +236,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return clsConfig.strDocRoot + "\\" + Properties.Settings.Default.ThumbPath.TrimEnd('\\') + "\\";
+                return clsConfig.strDocRoot + "\\" + WebConfigurationManager.AppSettings["ThumbPath"].ToString().TrimEnd('\\') + "\\";
             }
         }
 
@@ -246,7 +247,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return clsConfig.strBaseURL + "/" + Properties.Settings.Default.UploadPath.Replace('\\', '/');
+                return clsConfig.strBaseURL + "/" + WebConfigurationManager.AppSettings["UploadPath"].ToString().Replace('\\', '/');
             }
         }
 
@@ -257,7 +258,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return clsConfig.strBaseURL + "/" + Properties.Settings.Default.ThumbPath.Replace('\\', '/');
+                return clsConfig.strBaseURL + "/" + WebConfigurationManager.AppSettings["ThumbPath"].ToString().Replace('\\', '/');
             }
         }
 
@@ -268,7 +269,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Convert.ToBoolean(Properties.Settings.Default.AllowUploadFile);
+                return Convert.ToBoolean(WebConfigurationManager.AppSettings["AllowUploadFile"].ToString());
             }
         }
 
@@ -279,7 +280,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Convert.ToBoolean(Properties.Settings.Default.AllowDeleteFile);
+                return Convert.ToBoolean(WebConfigurationManager.AppSettings["AllowDeleteFile"].ToString());
             }
         }
 
@@ -290,7 +291,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Convert.ToBoolean(Properties.Settings.Default.AllowSearch);
+                return Convert.ToBoolean(WebConfigurationManager.AppSettings["AllowSearch"].ToString());
             }
         }
 
@@ -301,7 +302,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Convert.ToBoolean(Properties.Settings.Default.AllowCreateFolder);
+                return Convert.ToBoolean(WebConfigurationManager.AppSettings["AllowCreateFolder"].ToString());
             }
         }
 
@@ -312,7 +313,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Convert.ToBoolean(Properties.Settings.Default.AllowDeleteFolder);
+                return Convert.ToBoolean(WebConfigurationManager.AppSettings["AllowDeleteFolder"].ToString());
             }
         }
 
@@ -323,7 +324,7 @@ namespace TinyFileManager.NET
         {
             get
             {
-                return Properties.Settings.Default.RessourcePrefix;
+                return WebConfigurationManager.AppSettings["RessourcePrefix"].ToString();
             }
         }
 
