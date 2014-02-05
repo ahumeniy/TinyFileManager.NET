@@ -136,14 +136,16 @@ namespace TinyFileManager.NET
                     }
 
                     HttpPostedFile filUpload = Request.Files["file"];
+                    string strTargetFileName;
                     string strTargetFile;
                     string strThumbFile;
 
                     //check file was submitted
                     if ((filUpload != null) && (filUpload.ContentLength > 0))
                     {
-                        strTargetFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + filUpload.FileName, DirectoryType.Upload);
-                        strThumbFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + filUpload.FileName, DirectoryType.Thumbnail);
+                        strTargetFileName = Path.GetFileName(filUpload.FileName);
+                        strTargetFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + strTargetFileName, DirectoryType.Upload);
+                        strThumbFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + strTargetFileName, DirectoryType.Thumbnail);
                         filUpload.SaveAs(strTargetFile);
 
                         if (this.isImageFile(strTargetFile))
