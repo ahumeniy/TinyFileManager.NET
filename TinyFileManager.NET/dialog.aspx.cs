@@ -22,6 +22,7 @@ namespace TinyFileManager.NET
         public string strLang;
         public string strEditor;
         public string strCurrPath;
+        public string strCurrLink;      // dialog.aspx?editor=.... for simplicity
         public string strCallback;
         public ArrayList arrLinks = new ArrayList();
 
