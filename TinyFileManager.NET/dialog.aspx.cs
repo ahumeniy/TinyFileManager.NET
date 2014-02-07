@@ -128,30 +128,37 @@ namespace TinyFileManager.NET
                 case "upload":
                     strFolder = Request.Form["folder"] + "";
 
-                    // end response if we dont't want files uploaded in this folder
-                    if (!clsConfig.objDirectoryResolver.CanUploadInFolder(strFolder))
+                    try
                     {
-                        Response.End();
-                        break;
-                    }
-
-                    HttpPostedFile filUpload = Request.Files["file"];
-                    string strTargetFileName;
-                    string strTargetFile;
-                    string strThumbFile;
-
-                    //check file was submitted
-                    if ((filUpload != null) && (filUpload.ContentLength > 0))
-                    {
-                        strTargetFileName = Path.GetFileName(filUpload.FileName);
-                        strTargetFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + strTargetFileName, DirectoryType.Upload);
-                        strThumbFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + strTargetFileName, DirectoryType.Thumbnail);
-                        filUpload.SaveAs(strTargetFile);
-
-                        if (this.isImageFile(strTargetFile))
+                        // end response if we dont't want files uploaded in this folder
+                        if (!clsConfig.objDirectoryResolver.CanUploadInFolder(strFolder))
                         {
-                            this.createThumbnail(strTargetFile, strThumbFile);
+                            Response.End();
+                            break;
                         }
+
+                        HttpPostedFile filUpload = Request.Files["file"];
+                        string strTargetFileName;
+                        string strTargetFile;
+                        string strThumbFile;
+
+                        //check file was submitted
+                        if ((filUpload != null) && (filUpload.ContentLength > 0))
+                        {
+                            strTargetFileName = Path.GetFileName(filUpload.FileName);
+                            strTargetFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + strTargetFileName, DirectoryType.Upload);
+                            strThumbFile = clsConfig.objDirectoryResolver.GetAbsolutePath(this.strFolder + strTargetFileName, DirectoryType.Thumbnail);
+                            filUpload.SaveAs(strTargetFile);
+
+                            if (this.isImageFile(strTargetFile))
+                            {
+                                this.createThumbnail(strTargetFile, strThumbFile);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Response.Write(ex.Message);
                     }
 
                     // end response

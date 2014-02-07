@@ -21,20 +21,34 @@ h3{ font-size:14px;}
 .preview{ padding-left:19px; padding-right:18px;}
 .preview:hover{ padding-left:18px; padding-right:18px;}
 .top-right{position: absolute; top:0px; right: 0px;}
-.filters{ margin-top:0px; padding-bottom:10px; border-bottom:1px solid #eeeeee;} 
+.filters{ margin-top:0px; padding-bottom:10px; border-bottom:1px solid #eeeeee; height:30px;} 
 .uploader{
-	position:absolute;
-	top:100px;
-	margin:auto;
-	width:100%;
-	z-index:9999;
-	background:#eeeeee;
-	padding-top:20px;
-	display:none;
+    position:absolute;
+    top:100px;
+    margin:auto;
+    width:100%;
+    z-index:9999;
+    background:#eeeeee;
+    padding-top:20px;
+    display:none;
 }
 .download-form{
-	margin-bottom:25px;
+    margin-bottom:25px;
 }
 .directory-img{
-	margin-top:25px;
+    margin-top:25px;
+}
+.pull-center{
+    float:left;
+    width:100%;
+}
+.verticalLine{
+    border-left: thin solid #333;
+    display:inline;
+}
+.search{
+    margin-bottom:0px !important;
+}
+.icon-fit{
+    margin: 3px 0px !important;
 }

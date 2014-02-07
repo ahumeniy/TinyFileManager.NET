@@ -226,6 +226,9 @@
     <Folder Include="resources\files\" />
     <Folder Include="resources\thumbs\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Distro.pubxml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
